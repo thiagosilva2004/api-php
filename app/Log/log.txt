@@ -1,0 +1,1 @@
+mensagem: testando log data e hora: 24-09-2023 01:01:16 pm local: LogTest excecao: Excecao Testada sql: SQL COM ERRO dados recebidos: DADOS recebidos do json

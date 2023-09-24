@@ -1,6 +1,7 @@
 <?php
 
-use util\RotasUtil;
+use app\Log\Log;
+use app\Principal;
 
 header("Acess-Control-Allow-Origin *");
 header('Content-Type: application/json; charset=UTF-8');
@@ -15,5 +16,7 @@ try {
 
 } catch (\Throwable $th) {
    http_response_code(500);
-   echo $th->getMessage();
+
+   $log = new Log('Erro insperado', 'Principal', $th->getMessage());
+   $log->gravarLog();
 }

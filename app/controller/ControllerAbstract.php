@@ -1,38 +1,26 @@
 <?php
 
-namespace app\controller;
+namespace App\controller;
 
-use app\DB\DB;
-use app\Log\LogInterface;
+use App\DB\DB;
+use App\Log\LogInterface;
 use stdClass;
 
 abstract class ControllerAbstract
 {
-    private object $db;
-    private LogInterface $log;
-    protected array $dadosRecebidos;
+    protected object $db;
+    protected LogInterface $log;
 
-    public function __construct(object $db, LogInterface $log, array $dadosRecebidos)
+    public function __construct(object $db, LogInterface $log)
     {
         $this->db = $db;
         $this->log = $log;
-        $this->dadosRecebidos = $dadosRecebidos;
     }
 
-    public abstract function inserir(): stdClass;
-    public abstract function apagar(): stdClass;
-    public abstract function alterar(): stdClass;
-    public abstract function alterarParcialmente(): stdClass;
-    public abstract function buscarTodos(): stdClass;
-    public abstract function buscarPeloID(): stdClass;
-
-    public function getDadosRecebidos(): array
-    {
-        return $this->dadosRecebidos;
-    }
-
-    public function setDadosRecebidos(array $dadosRecebidos): void
-    {
-        $this->dadosRecebidos = $dadosRecebidos;
-    }
+    public abstract function inserir(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
+    public abstract function apagar(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
+    public abstract function alterar(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
+    public abstract function alterarParcialmente(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
+    public abstract function buscarTodos(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
+    public abstract function buscarPeloID(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass;
 }

@@ -1,8 +1,9 @@
 <?php
 
-namespace controller;
+namespace App\controller;
 
-use app\Util\token\TokenInterface;
+use App\Util\RetornoRequisicao;
+use App\Util\token\TokenInterface;
 use stdClass;
 class Token
 {
@@ -19,7 +20,7 @@ class Token
      */
     public function gerarToken(array $dados): stdClass
     {      
-        $retorno = GetInstanceRetornoRequisicao();
+        $retorno = RetornoRequisicao::getInstance();
 
         $dadosRetorno = ['token' => $this->tokenClass->gerarToken()];
         $retorno->sucesso = true;

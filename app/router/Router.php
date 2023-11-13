@@ -2,7 +2,9 @@
 
 namespace App\router;
 
-use app\util\RotasUtil;
+use App\util\RotasUtil;
+use App\Util\RetornoRequisicao;
+use App\Util\ConstantesGenericasUtil;
 use stdClass;
 
 class Router
@@ -21,7 +23,7 @@ class Router
     public function processar_uri(): stdClass
     {
         $uri_encontrada = false;
-        $retorno = GetInstanceRetornoRequisicao();
+        $retorno = RetornoRequisicao::getInstance();   
 
         foreach ($this->rota->getRotas() as $rota) {
             if ($this->rotaComparacao->compara($rota)) {
@@ -41,7 +43,7 @@ class Router
                     }
                 }
 
-                return call_user_func($rota->controller, $this->dadosRecebidos);
+                $retorno = call_user_func($rota->controller, $this->dadosRecebidos, RotasUtil::getDadosRota($this->rotaComparacao->getUri(), $rota),RotasUtil::getDadosHeader());
 
                 break;
             }
@@ -49,7 +51,17 @@ class Router
 
         if (!$uri_encontrada) {
             http_response_code(404);
+            die;
+            exit;
         }
+
+        if($retorno->mensagem === ConstantesGenericasUtil::MSG_ERRO_INSPERADO){
+            http_response_code(500);
+            die;
+            exit;
+        }
+
+        // criar class responsavel por verificar e responder os status http
 
         return $retorno;
     }

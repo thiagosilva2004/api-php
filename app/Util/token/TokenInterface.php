@@ -1,6 +1,6 @@
 <?php
 
-    namespace app\Util\token;
+    namespace App\Util\token;
 
     interface TokenInterface{
         public function gerarToken(array $dados = []): string;

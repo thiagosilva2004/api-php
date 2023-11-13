@@ -21,6 +21,9 @@ abstract class ConstantesGenericasUtil
 
     /* RECURSO USUARIOS */
     public const MSG_ERRO_ID_OBRIGATORIO = 'ID é obrigatório!';
+    public const MSG_ERRO_LOGIN_INVALIDO = 'Login ou senha inválido';
+    public const MSG_ERRO_LOGIN_NAO_INFORMADO = 'Nenhum login foi informado';
+    public const MSG_ERRO_SENHA_NAO_INFORMADO = 'Nenhuma senha foi informada';
     public const MSG_ERRO_LOGIN_EXISTENTE = 'Login já existente!';
     public const MSG_ERRO_LOGIN_SENHA_OBRIGATORIO = 'Login e Senha são obrigatórios!';
 }

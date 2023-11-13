@@ -1,6 +1,6 @@
 <?php
 
-namespace app\router\middlewares;
+namespace App\router\middlewares;
 
 use stdClass;
 

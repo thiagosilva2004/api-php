@@ -1,9 +1,9 @@
 <?php
 
-namespace app\util;
+namespace App\util;
 
-use app\router\RotaPattern;
-use app\Util\Enums\TipoRequest;
+use App\router\RotaPattern;
+use App\Util\Enums\TipoRequest;
 use stdClass;
 
 class RotasUtil
@@ -16,7 +16,7 @@ class RotasUtil
 
     public static function getMetodo(): TipoRequest
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return TipoRequest::getType($_SERVER['REQUEST_METHOD']);
     }
 
     /**

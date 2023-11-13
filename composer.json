@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "app\\": "app/"
+            "App\\": "App/"
         }
     },
     "autoload-dev": {
@@ -19,5 +19,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.3"
+    },
+    "require": {
+        "php-di/php-di": "^7.0"
     }
 }

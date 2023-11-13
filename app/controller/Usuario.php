@@ -1,51 +1,78 @@
 <?php
 
-namespace app\controller;
+namespace App\controller;
 
-use app\DB\DB;
-use app\Log\LogInterface;
-use app\model\Usuario as UsuarioModel;
+use App\DB\DAO\Usuario as UsuarioDAO;
+use App\Log\LogInterface;
+use App\model\Usuario as UsuarioModel;
+use App\Util\ConstantesGenericasUtil;
+use App\Util\RetornoRequisicao;
 use stdClass;
 
-class Usuario extends ControllerAbstract{
+class Usuario extends ControllerAbstract
+{
 
     private UsuarioModel $usuarioModel;
+    private UsuarioDAO $usuarioDAO;
 
-    public function __construct(object $db, LogInterface $log,UsuarioModel $usuarioModel, array $dadosRecebidos = array())
+    public function __construct(object $db, LogInterface $log, UsuarioModel $usuarioModel, UsuarioDAO $usuarioDAO)
     {
         $this->usuarioModel = $usuarioModel;
-        parent::__construct($db, $log, $dadosRecebidos);
+        $this->usuarioDAO = $usuarioDAO;
+        parent::__construct($db, $log);
     }
 
-    public function inserir():stdClass{
-        return GetInstanceRetornoRequisicao();
-    }
-
-    public function apagar():stdClass{
-        return GetInstanceRetornoRequisicao();
-    }
-
-    public function alterar():stdClass{
-        return GetInstanceRetornoRequisicao();
-    }
-
-    public function alterarParcialmente():stdClass{
-        return GetInstanceRetornoRequisicao();
-    }
-
-
-    public function validarLogin():stdClass{
-        return GetInstanceRetornoRequisicao();
-    }
-
-    public function buscarTodos():stdClass
+    public function inserir(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
     {
-        return GetInstanceRetornoRequisicao();
+        return RetornoRequisicao::getInstance();
     }
 
-    public function buscarPeloID():stdClass
+    public function apagar(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
     {
-        return GetInstanceRetornoRequisicao();
+        return RetornoRequisicao::getInstance();
     }
 
+    public function alterar(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
+    {
+        return RetornoRequisicao::getInstance();
+    }
+
+    public function alterarParcialmente(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
+    {
+        return RetornoRequisicao::getInstance();
+    }
+
+    public function validarLogin(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
+    {
+        $retorno = RetornoRequisicao::getInstance();
+
+        if(!is_array($dadosRecebidos) || count($dadosRecebidos) <= 0){
+            $retorno->sucesso = false;
+            $retorno->mensagem = ConstantesGenericasUtil::MSG_ERR0_JSON_VAZIO;
+            return $retorno;
+        }
+
+        $login = isset($dadosRecebidos['login']) ? trim($dadosRecebidos['login']) : '';
+        $senha = isset($dadosRecebidos['senha']) ? trim($dadosRecebidos['senha']) : '';
+
+        $retorno = $this->usuarioDAO->validarLogin($login, $senha);
+
+        if(!$retorno->sucesso){
+            return $retorno;
+        }
+
+        $retorno->dados = json_decode($retorno->dados);
+
+        return $this->usuarioDAO->buscarPeloID($retorno->dados->ID, ['nome','tipo']);
+    }
+
+    public function buscarTodos(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
+    {
+        return RetornoRequisicao::getInstance();
+    }
+
+    public function buscarPeloID(array|null $dadosRecebidos, array|null $dadosRotas, array|null $dadosHeader): stdClass
+    {
+        return RetornoRequisicao::getInstance();
+    }
 }

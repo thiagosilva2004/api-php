@@ -1,8 +1,9 @@
 <?php
 
-namespace app\router\middlewares;
+namespace App\router\middlewares;
 
 use app\Util\token\TokenInterface;
+use App\Util\RetornoRequisicao;
 use stdClass;
 
 class ValidarToken implements MiddlewaresInterface
@@ -19,7 +20,7 @@ class ValidarToken implements MiddlewaresInterface
      * @return StdClass retornoRequisicao;
      */
     public function execute(array $dadosRecebidos, array $dadosRotas, array $dadosHeader):stdClass{
-        $retorno = GetInstanceRetornoRequisicao();
+        $retorno = RetornoRequisicao::getInstance();
         $retorno->sucesso = false;
         $retorno->mensagem = "token inválido";
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace app\router;
+namespace App\router;
 
-use app\Util\Enums\TipoRequest;
+use App\Util\Enums\TipoRequest;
 use stdClass;
 
     class RotaComparacao{

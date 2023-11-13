@@ -1,6 +1,6 @@
 <?php
 
-    namespace app\router;
+    namespace App\router;
 
     class RotaPattern{
         public static function getPatterns():array{

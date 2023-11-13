@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Log;
+namespace App\Log;
 
 use DateTime;
 use DateTimeZone;

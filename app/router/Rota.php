@@ -1,26 +1,30 @@
 <?php
 
-namespace app\router;
+namespace App\router;
 
 use Closure;
-use app\controller\ControllerAbstract;
-use app\controller\Usuario;
-use app\router\middlewares\ValidarToken as MiddlewaresValidarToken;
-use app\Util\Enums\TipoRequest;
-use controller\Token as TokenController;
+use App\controller\ControllerAbstract;
+use App\router\middlewares\ValidarToken as MiddlewaresValidarToken;
+use App\Util\Enums\TipoRequest;
+use App\Util\ContainerBuilder;
+use App\controller\Usuario as UsuarioController;
 use stdClass;
 
 class Rota
 {
 
     private array $rotas;
-    private Usuario $usuarioController;
-    private TokenController $tokenController;
+    private UsuarioController $usuarioController;
     private MiddlewaresValidarToken $validarTokenMiddlewares;
 
     public function __construct()
     {
+        $containerBuild = ContainerBuilder::getinstance();
         $this->rotas = array();
+
+        $this->usuarioController = $containerBuild->get('App\controller\Usuario');
+
+        $this->validarTokenMiddlewares = $containerBuild->get('App\router\middlewares\ValidarToken');
     }
 
     public function getRotas(): array
@@ -51,7 +55,7 @@ class Rota
 
     public function gerarRotas(): void
     {
-        $this->addRota(TipoRequest::GET, '/token', $this->tokenController->gerarToken(...));
+        $this->addRota(TipoRequest::POST, '/login', $this->usuarioController->validarLogin(...));
         $this->addGroup('usuarios', $this->usuarioController, [$this->validarTokenMiddlewares->execute(...)]);
     }
 
@@ -65,20 +69,5 @@ class Rota
         $rota->apelido = $apelido;
 
         array_push($this->rotas, $rota);
-    }
-
-    public function setUsuarioController(Usuario $usuarioController): void
-    {
-        $this->usuarioController = $usuarioController;
-    }
-
-    public function setTokenController(TokenController $tokenController): void
-    {
-        $this->tokenController = $tokenController;
-    }
-
-    public function setValidarTokenMiddlewares(MiddlewaresValidarToken $validarTokenMiddlewares):void
-    {
-        $this->validarTokenMiddlewares = $validarTokenMiddlewares;
     }
 }

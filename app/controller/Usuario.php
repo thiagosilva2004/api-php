@@ -12,8 +12,8 @@ use stdClass;
 class Usuario extends ControllerAbstract
 {
 
-    private UsuarioModel $usuarioModel;
-    private UsuarioDAO $usuarioDAO;
+    private readonly UsuarioModel $usuarioModel;
+    private readonly UsuarioDAO $usuarioDAO;
 
     public function __construct(object $db, LogInterface $log, UsuarioModel $usuarioModel, UsuarioDAO $usuarioDAO)
     {

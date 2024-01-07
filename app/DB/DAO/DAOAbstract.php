@@ -153,9 +153,9 @@ abstract class DAOAbstract
             $totalRegistros = $stmt->rowCount();
             if ($totalRegistros === 1) {
                 $registros = $stmt->fetch($this->db::FETCH_ASSOC);
-                $retornoRequisicao->dados = json_encode($registros);
+                $retornoRequisicao->dados = $registros;
             } else {
-                $retornoRequisicao->dados = '{' . $this->tabela . ' : [] }';
+                $retornoRequisicao->dados = array();
             }
 
             $retornoRequisicao->sucesso = true;

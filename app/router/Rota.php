@@ -2,29 +2,18 @@
 
 namespace App\router;
 
-use Closure;
-use App\controller\ControllerAbstract;
-use App\router\middlewares\ValidarToken as MiddlewaresValidarToken;
+use App\controller\Usuario;
+use App\router\middlewares\ValidarToken;
 use App\Util\Enums\TipoRequest;
-use App\Util\ContainerBuilder;
-use App\controller\Usuario as UsuarioController;
 use stdClass;
 
 class Rota
 {
-
     private array $rotas;
-    private UsuarioController $usuarioController;
-    private MiddlewaresValidarToken $validarTokenMiddlewares;
 
     public function __construct()
     {
-        $containerBuild = ContainerBuilder::getinstance();
         $this->rotas = array();
-
-        $this->usuarioController = $containerBuild->get('App\controller\Usuario');
-
-        $this->validarTokenMiddlewares = $containerBuild->get('App\router\middlewares\ValidarToken');
     }
 
     public function getRotas(): array
@@ -37,36 +26,45 @@ class Rota
         $rota = new stdClass;
         $rota->metodo = null;
         $rota->uri = null;
-        $rota->controller = null;
-        $rota->middlewares = array();
+        $rota->controller_di_build = '';
+        $rota->controller_funtion_name = '';
+        $rota->middlewares_di_build = array();
         $rota->apelido = array();
+        $rota->nivel_acesso = 0;
         return $rota;
     }
 
-    public function addGroup(string $uri, ControllerAbstract $controller, array $middleware = array()): void
+    public function addGroup(string $uri, string $controller_di_build, array $middlewares_di_build = array()): void
     {
-        $this->addRota(TipoRequest::GET, '/' . $uri . '/(:numeric)', $controller->buscarPeloID(...), $middleware, array($uri . '_id'));
-        $this->addRota(TipoRequest::GET, '/' . $uri, $controller->buscarTodos(...), $middleware);
-        $this->addRota(TipoRequest::POST, '/' . $uri, $controller->inserir(...), $middleware);
-        $this->addRota(TipoRequest::PUT, '/' . $uri, $controller->alterar(...), $middleware);
-        $this->addRota(TipoRequest::PATCH, '/' . $uri, $controller->alterarParcialmente(...), $middleware);
-        $this->addRota(TipoRequest::DELETE, '/' . $uri, $controller->apagar(...), $middleware);
+        $this->addRota(TipoRequest::GET, '/' . $uri . '/(:numeric)', $controller_di_build, 'buscarPeloID', $middlewares_di_build, array($uri . '_id'));
+        $this->addRota(TipoRequest::GET, '/' . $uri, $controller_di_build, 'buscarTodos', $middlewares_di_build);
+        $this->addRota(TipoRequest::POST, '/' . $uri, $controller_di_build, 'inserir', $middlewares_di_build);
+        $this->addRota(TipoRequest::PUT, '/' . $uri, $controller_di_build, 'alterar', $middlewares_di_build);
+        $this->addRota(TipoRequest::PATCH, '/' . $uri, $controller_di_build, 'alterarParcialmente', $middlewares_di_build);
+        $this->addRota(TipoRequest::DELETE, '/' . $uri, $controller_di_build, 'apagar', $middlewares_di_build);
     }
 
     public function gerarRotas(): void
     {
-        $this->addRota(TipoRequest::POST, '/login', $this->usuarioController->validarLogin(...));
-        $this->addGroup('usuarios', $this->usuarioController, [$this->validarTokenMiddlewares->execute(...)]);
+        $this->addRota(
+            metodo: TipoRequest::POST,
+            uri: '/login',
+            controller_di_build: Usuario::class,
+            controller_funtion_name: 'validarLogin'
+        );
+        $this->addGroup(uri:'usuarios', controller_di_build:Usuario::class, middlewares_di_build:[ValidarToken::class]);
     }
 
-    public function addRota(TipoRequest $metodo, string $uri, Closure $controller, array $middleware = array(), array $apelido = array()): void
+    public function addRota(TipoRequest $metodo, string $uri, string $controller_di_build, string $controller_funtion_name, array $middlewares_di_build = array(), array $apelido = array(),int $nivel_acesso = 0): void
     {
         $rota = $this->getInstanceRota();
         $rota->metodo = $metodo;
         $rota->uri = $uri;
-        $rota->controller = $controller;
-        $rota->middlewares = $middleware;
+        $rota->controller_di_build = $controller_di_build;
+        $rota->controller_funtion_name = $controller_funtion_name;
+        $rota->middlewares_di_build = $middlewares_di_build;
         $rota->apelido = $apelido;
+        $rota->nivel_acesso = $nivel_acesso;
 
         array_push($this->rotas, $rota);
     }

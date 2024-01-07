@@ -20,16 +20,7 @@ use stdClass;
         private readonly Router $router;
         private readonly RotaComparacao $rotaComparacao;
 
-        public function __construct()
-        {
-          
-        }
-
-        
-        /**
-         * @return StdClass retornoRequisicao;
-         */
-        public function tratarRequisicao():stdClass{
+        public function tratarRequisicao():String{
             $this->dadosRecebidos = JsonUtil::tratarCorpoRequisicaoJson();
 
             $this->uri = RotasUtil::getUri();
@@ -40,6 +31,17 @@ use stdClass;
 
             $this->rotaComparacao = new RotaComparacao($this->uri, $this->metodo);
             $this->router = new Router($this->rota, $this->rotaComparacao, $this->dadosRecebidos);
-            return $this->router->processar_uri();
+
+            $retorno = $this->router->processar_uri();
+
+            if($retorno->sucesso){
+                return json_encode($retorno->dados);
+            }else{
+                $retornoErro = new stdClass;
+                $retornoErro->sucesso = false;
+                $retornoErro->mensagem = $retorno->mensagem;
+
+                return json_encode($retornoErro);
+            }
         }
     }

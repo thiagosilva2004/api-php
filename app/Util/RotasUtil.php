@@ -10,7 +10,7 @@ class RotasUtil
 {
     public static function getUri(): string
     {
-        $uri = str_replace('/' . DIR_PROJETO, '', $_SERVER['REQUEST_URI']);
+        $uri = str_replace('/' . $_ENV['DIR_PROJETO'], '', $_SERVER['REQUEST_URI']);
         return $uri;
     }
 

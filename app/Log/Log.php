@@ -22,7 +22,7 @@ class Log implements LogInterface
         $this->sql = $sql;
         $this->dadosRecebidos = $dadosRecebidos;
 
-        $this->caminho = __DIR__ . '\log.txt';
+        $this->caminho = __DIR__ . DIRECTORY_SEPARATOR . 'log.txt';
     }
 
     public function gravarLog():void{

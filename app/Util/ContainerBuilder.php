@@ -29,7 +29,7 @@ final class ContainerBuilder
                 new UsuarioModel(),
                 \DI\get('App\DB\DAO\Usuario'),
             ),
-            TokenInterface::class => \DI\create(TokenJWT::class)->constructor(CHAVE_JWT, ISS, AUD),
+            TokenInterface::class => \DI\create(TokenJWT::class)->constructor($_ENV['CHAVE_JWT'], $_ENV['ISS'], $_ENV['AUD']),
             ValidarToken::class => \DI\create(ValidarToken::class)->constructor(\DI\get('App\Util\token\TokenInterface')),
         ]);
 

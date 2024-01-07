@@ -5,8 +5,6 @@ namespace App\DB;
 use PDO;
 use PDOException;
 
-require_once __DIR__ . '/../../config.php';
-
 class DB
 {
     private static object $instance;
@@ -14,7 +12,7 @@ class DB
     public static function getInstance(){
         try {
             if(!isset(self::$instance)){
-                self::$instance = new PDO('mysql:host=' . BD_HOST . '; dbname=' . BD_NAME . ';', BD_USER, BD_PASSWORD);
+                self::$instance = new PDO('mysql:host=' . $_ENV['BD_HOST'] . '; dbname=' . $_ENV['BD_NAME'] . ';', $_ENV['BD_USER'], $_ENV['BD_PASSWORD']);
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
             return self::$instance;

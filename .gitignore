@@ -1,2 +1,4 @@
 .env
-.vscode
+/.vscode
+.phpunit.result.cache
+qodana.yaml

@@ -21,6 +21,7 @@
         "phpunit/phpunit": "^10.3"
     },
     "require": {
+        "ext-pdo": "*",
         "php-di/php-di": "^7.0",
         "vlucas/phpdotenv": "^5.6"
     }
